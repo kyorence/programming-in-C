@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main() {
+    double a, b, c, D, x1, x2;
+    int x;
+
+    while (1) {
+        printf("Введите a: ");
+        scanf("%lf", &a);
+        printf("Введите b: ");
+        scanf("%lf", &b);
+        printf("Введите c: ");
+        scanf("%lf", &c);
+
+        D = b*b - 4*a*c;
+        printf("D = %lf\n", D);
+
+        if (D > 0) {
+            x1 = (-b + sqrt(D)) / (2*a);
+            x2 = (-b - sqrt(D)) / (2*a);
+            printf("x1 = %lf, x2 = %lf\n", x1, x2);
+        } 
+        else if (D == 0) {
+            x1 = -b / (2*a);
+            printf("У уравнения один корень: x = %lf\n", x1);
+        } 
+        else {
+            printf("Корней нет в действительных числах.\n");
+        }
+
+        printf("Для повторения работы программы нажмите 1: ");
+        scanf("%d", &x);
+
+        if (x != 1) 
+            break;
+    }
+
+    return 0;
+}
