@@ -1,0 +1,142 @@
+//main.c
+#include <stdio.h>
+#include <stdlib.h>
+#include "matrix_operations.h"
+
+int main() {
+    int n;
+    printf("Введите размерность матрицы: ");
+    scanf("%d", &n);
+
+    double** matrix1 = createMatrix(n);
+    double** matrix2 = createMatrix(n);
+    double** resultMatrix;
+
+    printf("Введите элементы первой матрицы:\n");
+    fillMatrix(matrix1, n);
+
+    printf("Введите элементы второй матрицы:\n");
+    fillMatrix(matrix2, n);
+
+    char operation;
+    printf("Введите знак операции (+, -, *): ");
+    scanf(" %c", &operation);
+
+    switch (operation) {
+        case '+':
+            resultMatrix = addMatrix(matrix1, matrix2, n);
+            break;
+        case '-':
+            resultMatrix = subtractMatrix(matrix1, matrix2, n);
+            break;
+        case '*':
+            resultMatrix = multiplyMatrix(matrix1, matrix2, n);
+            break;
+        default:
+            printf("Неверный знак операции!\n");
+            return 1;
+    }
+
+    printf("Результат операции:\n");
+    printMatrix(resultMatrix, n);
+
+    freeMatrix(matrix1, n);
+    freeMatrix(matrix2, n);
+    freeMatrix(resultMatrix, n);
+
+    return 0;
+}
+
+//matrix_operations.h
+#ifndef MATRIX_OPERATIONS_H
+#define MATRIX_OPERATIONS_H
+
+double** createMatrix(int n);
+void fillMatrix(double** matrix, int n);
+void printMatrix(double** matrix, int n);
+double** addMatrix(double** matrix1, double** matrix2, int n);
+double** subtractMatrix(double** matrix1, double** matrix2, int n);
+double** multiplyMatrix(double** matrix1, double** matrix2, int n);
+void freeMatrix(double** matrix, int n);
+
+#endif
+
+//matrix_operations.c
+#include <stdio.h>
+#include <stdlib.h>
+#include "matrix_operations.h"
+
+double** createMatrix(int n) {
+    double** matrix = (double**)malloc(n * sizeof(double*));
+
+    for (int i = 0; i < n; i++) {
+        matrix[i] = (double*)malloc(n * sizeof(double));
+    }
+
+    return matrix;
+}
+
+void fillMatrix(double** matrix, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%lf", &matrix[i][j]);
+        }
+    }
+}
+
+void printMatrix(double** matrix, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%.2lf ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+double** addMatrix(double** matrix1, double** matrix2, int n) {
+    double** result = createMatrix(n);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            result[i][j] = matrix1[i][j] + matrix2[i][j];
+        }
+    }
+
+    return result;
+}
+
+double** subtractMatrix(double** matrix1, double** matrix2, int n) {
+    double** result = createMatrix(n);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            result[i][j] = matrix1[i][j] - matrix2[i][j];
+        }
+    }
+
+    return result;
+}
+
+double** multiplyMatrix(double** matrix1, double** matrix2, int n) {
+    double** result = createMatrix(n);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            result[i][j] = 0;
+
+            for (int k = 0; k < n; k++) {
+                result[i][j] += matrix1[i][k] * matrix2[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+void freeMatrix(double** matrix, int n) {
+    for (int i = 0; i < n; i++) {
+        free(matrix[i]);
+    }
+
+    free(matrix);
+}
